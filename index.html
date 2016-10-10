@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Stampede Queue Helices</title>
+		<link rel="stylesheet" href="helices.css">
+	</head>
+	<body>
+		<p id="header">stampede queue helices</p>
+		<script src="http://threejs.org/build/three.min.js"></script>
+		<!-- <script src="OrbitControls.js"></script> -->
+		<script src="HelixOrbitControls.js"></script>
+		<script src="OrbitAndPanControls.js"></script>
+		<script src="jquery-1.11.3.min.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>	
+		<script src="helices.js"></script>
+
+
+		<div class="container">
+
+			<ul id="job-size-toggle">
+				<li>Small Jobs</li>
+				<li class="selected">Medium Jobs</li>
+				<li>Large Jobs</li>
+				<!-- <li>All Jobs</li> -->
+			</ul>
+
+		</div>
+		<div class="hud" id="hud">
+			<p class="job-institution">Institution: </p>
+			<p class="job-fos">Field of Study: </p>
+			<p class="job-requested-time">Requested Time:</p>
+			<p class="job-elapsed-time">Elapsed Time: </p>
+			<p class="job-cpus">CPUs: </p>
+			<p class="job-pi">PI: </p>
+			<p class="job-abstract">Abstract: </p>
+		</div>
+		<script>
+			$("#job-size-toggle>li").click( function () {
+				//alert(this.innerHTML.split(" ")[0].toLowerCase());
+				$(".selected").removeClass("selected");
+				$(this).addClass("selected");
+				setVisibleHelix(this.innerHTML.split(" ")[0].toLowerCase());
+			});
+		</script>
+</body>
+</html>
