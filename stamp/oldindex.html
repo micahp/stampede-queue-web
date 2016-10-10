@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<title>Trying to get JSON</title>
+<style>
+html {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    background-color: #eeeeee;
+}
+li {
+    list-style: none;
+}
+</style>
+</head>
+<body>
+    <h2>Trying to get JSON</h2>
+    <p id="text">Below is the single JSON object</p>
+    <script>
+        $.ajax('taccaci-commnq-js/projects-running-jobs/project-details.json', function (data) {
+            console.log(data);
+        })
+        .done(function() {
+            console.log("success");
+        })
+        .fail(function(d, textStatus, error) {
+            console.log("getJSON failed with status message: " + textStatus + " and error message: " + error);
+        })
+        .always(function() {
+            console.log("complete");
+        });
+    </script>
+</body>
+</html>
+

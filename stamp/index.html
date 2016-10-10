@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Stampede Queue Helices</title>
+		<link rel="stylesheet" href="helices.css">
+	</head>
+	<body>
+		<p id="header">stampede queue helices</p>
+		<script src="http://threejs.org/build/three.min.js"></script>
+		<!-- <script src="OrbitControls.js"></script> -->
+		<script src="HelixOrbitControls.js"></script>
+		<script src="OrbitAndPanControls.js"></script>
+		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>	
+		<script src="helices.js"></script>
+
+
+		<div class="container">
+
+<!-- 			<p id="job-size">Job Size</p> -->
+			<ul id="job-size-toggle">
+				<li>Small Jobs</li>
+				<li>Medium Jobs</li>
+				<li>Large Jobs</li>
+			</ul>
+
+		</div>
+		<script>
+			$("#job-size-toggle>li").click( function () {
+				//alert(this.innerHTML.split(" ")[0].toLowerCase());
+				$(".selected").removeClass("selected");
+				$(this).addClass("selected");
+				setVisibleHelix(this.innerHTML.split(" ")[0].toLowerCase());
+			});
+		</script>
+</body>
+</html>
