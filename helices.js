@@ -367,7 +367,10 @@ function setSelectedJobType(newType) {
 // Finds the new selected project based on newly selected job
 function updateSelectedProject(selectedSphere, jobs) {
 
+	var selectedJobNum = -1;
+
 	for (var job of jobs) {
+		var job = jobs[jobNum];
 			
 		// See if selected sphere is in job's sphere list
 		//var sphereList = job["sphereList"];
