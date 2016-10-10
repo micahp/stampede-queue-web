@@ -367,9 +367,7 @@ function setSelectedJobType(newType) {
 // Finds the new selected project based on newly selected job
 function updateSelectedProject(selectedSphere, jobs) {
 
-	var selectedJobNum = -1;
-
-	for (var job of jobs) {
+	for (var jobNum = 0; jobNum < jobs.length; jobNum++) {
 		var job = jobs[jobNum];
 			
 		// See if selected sphere is in job's sphere list
@@ -380,6 +378,7 @@ function updateSelectedProject(selectedSphere, jobs) {
 
 				selectedProjectName = job["Extension"]["LocalAccount"];
 				console.log("selected project name is " + selectedProjectName);
+				hud(jobNum);
 
 			}
 
@@ -387,7 +386,6 @@ function updateSelectedProject(selectedSphere, jobs) {
 
 	}
 
-	hud();
 
 }
 
@@ -499,7 +497,7 @@ function animate() {
 }
 
 // Update Heads Up Display
-function hud(project) {
+function hud(jobNum) {
 	var $hud = $("#hud");
 	var $institution = $hud.find(".job-institution");
 	var $fos = $hud.find(".job-fos");
@@ -507,6 +505,7 @@ function hud(project) {
 	var $reqTime = $hud.find(".job-requested-time");
 	var $elapTime = $hud.find(".job-elapsed-time");
 	var $abstract = $hud.find(".job-abstract");
+	var job = projects[selectedProjectName]["jobs"][jobNum];
 	 
 	$institution.text("Institution: " +  projects[selectedProjectName]["pi_institution"]);
 	$fos.text("Field of Science: " + projects[selectedProjectName]["field_of_science"]);
@@ -515,6 +514,44 @@ function hud(project) {
 	$pi.text("PI: " + projects[selectedProjectName]["principal_investigator"]);
 	$abstract.text("Abstract: " + projects[selectedProjectName]["project_abstract"]);
 }
+
+function jobSetTimeHud(jobNum) {
+	var $hud = $("#hud");
+	var $reqTime = $hud.find(".job-requested-time");
+	var $elapTime = $hud.find(".job-elapsed-time");
+
+
+	var startDate = Date(projects[SelectedProjectName]["jobs"][jobNum]["CreationTime"]);
+	var requestedTime = projects[selectedProjectName]["jobs"][0]["RequestedTotalWallTime"];
+
+	var requestedTimeString = millisecondsToTimeString(requestedTime);
+	var elapsedTimeString = "";
+	
+	
+
+	//$reqTime.text("Requested Time: " + requestedTimeString);
+	//$elapTime.text("Elapsed Time: " + elapsedTimeString);
+	
+}
+
+function millisecondsToTimeString(ms) {
+	var str = "";	
+
+	var hoursInDay = 24;
+	var minutesInHour = 60;
+	var secondsInMinute = 60;
+	
+	var seconds = (ms / 1000) % 60;
+	var minutes = seconds / 60 % 60; 
+	var hours = minutes / 60 % 24;
+	var days = hours / 24;
+	if (days > 0) {
+		str += days + " days";
+	}	
+	str += hours + " hours " + minutes + " minutes " + seconds + " seconds";
+	return str;
+}
+	
 
 // Render frame
 function render() {

@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - materials - wireframe</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				margin: 0px;
+				background-color: #000000;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="http://threejs.org/build/three.min.js"></script>
+		<script src="http://threejs.org/examples/js/controls/OrbitControls.js"></script>
+
+		<script type="x-shader/x-vertex" id="vertexShader">
+
+			attribute vec3 center;
+			varying vec3 vCenter;
+
+			void main() {
+
+				vCenter = center;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+			}
+
+		</script>
+
+		<script type="x-shader/x-fragment" id="fragmentShader">
+
+			varying vec3 vCenter;
+
+			float edgeFactorTri() {
+
+				vec3 d = fwidth( vCenter.xyz );
+				vec3 a3 = smoothstep( vec3( 0.0 ), d * 1.5, vCenter.xyz );
+				return min( min( a3.x, a3.y ), a3.z );
+
+			}
+
+			void main() {
+
+				gl_FragColor.rgb = mix( vec3( 1.0 ), vec3( 0.2 ), edgeFactorTri() );
+				gl_FragColor.a = 1.0;
+			}
+
+		</script>
+
+		<script>
+
+			var camera, scene, renderer;
+
+			init();
+			animate();
+
+			function init() {
+
+				var geometry, wireframeMaterial, wireframe;
+				var colorMaterial, sphere;
+
+				var size = 150;
+
+
+
+				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 15000 );
+				camera.position.z = 800;
+
+				scene = new THREE.Scene();
+
+
+				// ADD WIREFRAME 1
+				geometry = new THREE.BufferGeometry().fromGeometry( new THREE.SphereGeometry( size / 2, 32, 16 ) );
+
+				setupAttributes( geometry );
+
+				wireframeMaterial = new THREE.ShaderMaterial( {
+					uniforms: {},
+					vertexShader: document.getElementById( 'vertexShader' ).textContent,
+					fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+				} );
+
+				wireframeMaterial.extensions.derivatives = true;
+
+				wireframe = new THREE.Mesh( geometry, wireframeMaterial );
+
+				wireframe.position.x = -250;
+				scene.add( wireframe );
+
+
+				// ADD COLORED SPHERE AND WIREFRAME 2
+				var yellow = 0xffff00;
+				colorMaterial = new THREE.MeshLambertMaterial( { color: yellow } );
+
+				var smallerGeometry = geometry.clone();
+				//smallerGeometry.scale(.9, .9, .9);
+				sphere = new THREE.Mesh( smallerGeometry, colorMaterial );
+				sphere.position.x = 0;
+
+				scene.add( sphere );
+
+				var wireframe2 = new THREE.WireframeHelper( sphere );
+				wireframe2.material.color.set( 0xffffff );
+				scene.add( wireframe2 );
+
+
+
+				// ADD WIREFRAME 3
+				var wireMat = new THREE.MeshBasicMaterial( { wireframe: true } );
+				var wireframe3 = new THREE.Mesh( geometry, wireMat );
+				wireframe3.position.x = 250;
+				scene.add(wireframe3);
+
+
+
+				// RENDERER
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+				//renderer.setClearColor(0x7a7a7a, 1.0);
+
+
+				// LIGHTS
+				var ambientLight = new THREE.AmbientLight( 0x222222 );
+
+				var light = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
+				light.position.set( 200, 400, 500 );
+
+				var light2 = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
+				light2.position.set( -500, 250, -200 );
+
+				scene.add(ambientLight);
+				scene.add(light);
+				scene.add(light2);
+
+				// CONTROLS
+				var controls = new THREE.OrbitControls( camera );
+
+				// EVENTS
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function setupAttributes( geometry ) {
+
+				// TODO: Bring back quads
+
+				var vectors = [
+					new THREE.Vector3( 1, 0, 0 ),
+					new THREE.Vector3( 0, 1, 0 ),
+					new THREE.Vector3( 0, 0, 1 )
+				];
+
+				var position = geometry.attributes.position;
+				var centers = new Float32Array( position.count * 3 );
+
+				for ( var i = 0, l = position.count; i < l; i ++ ) {
+
+					vectors[ i % 3 ].toArray( centers, i * 3 );
+
+				}
+
+				geometry.addAttribute( 'center', new THREE.BufferAttribute( centers, 3 ) );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				for ( var i = 0; i < scene.children.length; i ++ ) {
+
+					var object = scene.children[ i ];
+					object.rotation.x += 0.005;
+					object.rotation.y += 0.01;
+
+				}
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>

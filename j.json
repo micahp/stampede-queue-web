@@ -1,0 +1,6 @@
+{ "projectCode": "TG-MCB150013",
+    "cores": 128,
+    "pi": "Jianpeng Ma",
+    "fos": "Biochemistry and Molecular Structure and Function",
+    "inst": "Baylor College of Medicine",
+    "abstract": "To determine the 3-dimensional structures of a protein merely from its 1-dimensional sequence has been a major interest in the modern computational biology. Today, multiple approaches can be used to generate low-resolution models with 3~5 root-mean-square deviation (RMSD) from the native structure, while high-accuracy refinement is required to generate a high-resolution model (with 1~2 RMSD) from the low-resolution models. In the proposed project, we are going to combine parallel continuous simulated tempering (PCST) method, an enhanced sampling method we have developed recently, with the structured-based model (SBM) to further increase the sampling efficiency of rare events around important conformations in molecular simulation. The combined method will be applied in the refinement of 24 protein targets selected from the refinement category of the 10th Critical Assessment of Structure Prediction (CASP) experiments held in 2012. All-atom molecular simulations in explicit solvent will be performed to generate candidate models. Our method has already been coded into the latest GROMACS package and the preliminary testing shows some encouraging results." }
